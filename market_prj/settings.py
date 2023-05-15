@@ -81,16 +81,24 @@ WSGI_APPLICATION = 'market_prj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'NAME': 'market_prj_db',
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'prj_user',
-        'PASSWORD': 'prj_user',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'NAME': 'market_prj_db',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'USER': 'prj_user',
+#         'PASSWORD': 'prj_user',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
