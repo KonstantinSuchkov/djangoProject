@@ -18,4 +18,9 @@ urlpatterns = [
     path('accommodation/create/kindergardens/<int:pk>/', adminapp.accommodation_create, name='accommodation_create'),
     path('accommodation/read/<int:pk>/', adminapp.AccommodationDetailView.as_view(), name='accommodation_read'),
     path('accommodation/delete/<int:pk>/', adminapp.accommodation_delete, name='accommodation_delete'),
+    path('areas/read/kindergardens/<int:pk>/', adminapp.areas, name='areas'),
+    path('areas/update/<int:pk>/', adminapp.areas_update, name='areas_update'),
+    path('areas/create/kindergardens/<int:pk>/', adminapp.areas_create, name='areas_create'),
+    path('areas/read/<int:pk>/', adminapp.AreasDetailView.as_view(), name='areas_read'),
+    path('areas/delete/<int:pk>/', adminapp.areas_delete, name='areas_delete'),
 ]

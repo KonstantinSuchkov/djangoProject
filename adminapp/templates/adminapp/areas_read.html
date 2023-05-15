@@ -1,0 +1,44 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="product_read">
+        <div class="product_name">
+            Районы
+            <strong>
+                {{ object.name|title }}
+            </strong>
+        </div>
+        <img src="/media/{{ object.image|default:'area_img/default.jpg' }}"
+             alt="{{ object.name }}">
+        <div class="summary">
+            <b>в каталоге</b>
+            <p>{% if object.is_active %}да{% else %}нет{% endif %}</p>
+            <p>
+                <button>
+                    <a href="{% url 'admin:areas_update' object.pk %}">
+                        редактировать
+                    </a>
+                </button>
+            </p>
+            <p>
+                <button>
+                    <a href="{% url 'admin:areas_delete' object.pk %}">
+                        удалить
+                    </a>
+                </button>
+            </p>
+            <p>
+                <button>
+                    <a href="{% url 'admin:areas' object.kindergarden.pk %}">
+                        назад
+                    </a>
+                </button>
+            </p>
+        </div>
+    <div class="product_desc">
+        <b>краткая информация</b>
+        <p>{{ object.description }}</p>
+    </div>
+    </div>
+{% endblock %}

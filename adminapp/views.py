@@ -13,11 +13,11 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
-from mainapp.models import Accommodation
+from mainapp.models import Accommodation, ListOfAreas
 from mainapp.models import ListOfKindergarden
 from authapp.models import ClientUser
 from authapp.forms import ClientUserRegisterForm
-from adminapp.forms import ClientUserAdminEditForm
+from adminapp.forms import ClientUserAdminEditForm, AreasEditForm
 from adminapp.forms import AccommodationEditForm
 
 
@@ -235,3 +235,92 @@ def accommodation_delete(request, pk):
         'accommodation_to_delete': accommodation,
     }
     return render(request, 'adminapp/accommodation_delete.html', content)
+
+
+# админка - список районов
+@user_passes_test(lambda u: u.is_superuser)
+def areas(request, pk):
+    title = 'админка/районы'
+
+    kindergarden = get_object_or_404(ListOfKindergarden, pk=pk)
+    areas_list = ListOfAreas.objects.filter(
+        kindergarden__id=pk).order_by('name')
+
+    content = {
+        'title': title,
+        'kindergarden': kindergarden,
+        'objects': areas_list,
+    }
+
+    return render(request, 'adminapp/areas.html', content)
+
+
+# админка - создание нового района
+@user_passes_test(lambda u: u.is_superuser)
+def areas_create(request, pk):
+    title = 'районы/создание'
+    kindergarden = get_object_or_404(ListOfKindergarden, pk=pk)
+
+    if request.method == 'POST':
+        pass
+        areas_form = AreasEditForm(request.POST, request.FILES)
+        if areas_form.is_valid():
+            areas_form.save()
+            return HttpResponseRedirect(reverse('admin:areas', args=[pk]))
+
+    else:
+
+        areas_form = AreasEditForm(
+            initial={'kindergarden': kindergarden})
+    content = {
+        'title': title,
+        'update_form': areas_form,
+        'kindergarden': kindergarden,
+    }
+    return render(request, 'adminapp/areas_update.html', content)
+
+
+# админка - редактирование района
+@user_passes_test(lambda u: u.is_superuser)
+def areas_update(request, pk):
+    title = 'районы/редактирование'
+    edit_areas = get_object_or_404(ListOfAreas, pk=pk)
+
+    if request.method == 'POST':
+        areas_edit_form = AreasEditForm(
+            request.POST, request.FILES, instance=edit_areas)
+        if areas_edit_form.is_valid():
+            areas_edit_form.save()
+            return HttpResponseRedirect(
+                reverse('admin:areas_update', args=[edit_areas.pk]))
+    else:
+        areas_edit_form = AreasEditForm(instance=edit_areas)
+    content = {
+        'title': title,
+        'update_form': areas_edit_form,
+        'kindergarden': edit_areas.kindergarden,
+    }
+    return render(request, 'adminapp/areas_update.html', content)
+
+
+# админка - карточка района
+class AreasDetailView(DetailView):
+    model = ListOfAreas
+    template_name = 'adminapp/areas_read.html'
+
+
+# админка - удаление района
+@user_passes_test(lambda u: u.is_superuser)
+def areas_delete(request, pk):
+    title = 'районы/удаление'
+    areas = get_object_or_404(ListOfAreas, pk=pk)
+
+    if request.method == 'POST':
+        areas.is_active = False
+        areas.save()
+        return HttpResponseRedirect(reverse('admin:areas', args=[areas.kindergarden.pk]))
+    content = {
+        'title': title,
+        'areas_to_delete': areas,
+    }
+    return render(request, 'adminapp/areas_delete.html', content)
