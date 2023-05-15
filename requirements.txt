@@ -14,7 +14,7 @@ colorama==0.4.6
 cryptography==40.0.2
 defusedxml==0.7.1
 dj-config-url==0.1.1
-Django==4.0.10
+Django
 django-allauth==0.42.0
 gitdb==4.0.10
 GitPython==3.1.31
