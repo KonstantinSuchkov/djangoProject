@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'adminapp',
     'basketapp',
     'ordersapp',
+    'market_prj',
 ]
 
 MIDDLEWARE = [
